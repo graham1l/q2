@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -16,6 +17,7 @@ import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 @Path("/hello")
 public class GreetingResource {
+	protected static final Logger LOGGER = Logger.getLogger(GreetingResource.class.getName());
 
 	@Inject
 	GreetingService service;
@@ -30,7 +32,10 @@ public class GreetingResource {
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String hello() {
+		LOGGER.info("Entered hello()");
 		String downstreams = System.getenv("DOWNSTREAMS");
+		LOGGER.info("downstreams="+downstreams);
+
 
 		StringBuffer response = new StringBuffer();
 		response.append("hello");
@@ -58,6 +63,8 @@ public class GreetingResource {
 
 			}
 		}
+		LOGGER.info("Exit hello()");
+
 		return response.toString();
 
 	}
