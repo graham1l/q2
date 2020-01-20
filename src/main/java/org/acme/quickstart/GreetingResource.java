@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Map.Entry;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -35,6 +36,12 @@ public class GreetingResource {
 		LOGGER.info("Entered hello()");
 		String downstreams = System.getenv("DOWNSTREAMS");
 		LOGGER.info("downstreams="+downstreams);
+		
+		for (Entry<String, String> entry : System.getenv().entrySet())
+		{
+			LOGGER.info("Env:"+entry.getKey()+"="+entry.getValue());
+			
+		}
 
 
 		StringBuffer response = new StringBuffer();
