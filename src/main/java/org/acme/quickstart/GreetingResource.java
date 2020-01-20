@@ -35,8 +35,13 @@ public class GreetingResource {
 	public String hello() {
 		LOGGER.info("Entered hello()");
 		String downstreams = System.getenv("DOWNSTREAMS");
-		LOGGER.info("downstreams="+downstreams);
-		
+		LOGGER.info("Downstreams="+downstreams);
+		String msg = System.getenv("MESSAGE");
+		if (msg==null) 
+		{
+			msg="Hello";
+		}
+		LOGGER.info("Message="+msg);
 		for (Entry<String, String> entry : System.getenv().entrySet())
 		{
 			LOGGER.info("Env:"+entry.getKey()+"="+entry.getValue());
@@ -45,7 +50,7 @@ public class GreetingResource {
 
 
 		StringBuffer response = new StringBuffer();
-		response.append("hello");
+		response.append(msg);
 		if (downstreams != null) {
 			for (String downs : downstreams.split(",")) {
 				try {
