@@ -43,6 +43,7 @@ public class GreetingResource {
 			for (String downs : downstreams.split(",")) {
 				try {
 					URL url = new URL("http://" + downs);
+					LOGGER.info(url.toExternalForm());
 
 					HttpURLConnection con = (HttpURLConnection) url.openConnection();
 					con.setRequestMethod("GET");
