@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
@@ -12,6 +13,8 @@ import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
@@ -32,7 +35,7 @@ public class GreetingResource {
 
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	public String hello() {
+	public String hello(@Context HttpHeaders headers) {
 		LOGGER.info("Entered hello()");
 		String downstreams = System.getenv("DOWNSTREAMS");
 		LOGGER.info("Downstreams="+downstreams);
@@ -58,9 +61,16 @@ public class GreetingResource {
 				try {
 					URL url = new URL("http://" + downs);
 					LOGGER.info(url.toExternalForm());
+					
 
 					HttpURLConnection con = (HttpURLConnection) url.openConnection();
+					for (Entry<String, List<String>> e:headers.getRequestHeaders().entrySet())
+					{
+						con.setRequestProperty(e.getKey(),e.getValue().get(0));
+					}
+				
 					con.setRequestMethod("GET");
+				
 					BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 					String inputLine;
 					StringBuffer content = new StringBuffer();
