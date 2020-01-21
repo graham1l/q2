@@ -41,12 +41,14 @@ public class GreetingResource {
 		{
 			msg="Hello";
 		}
+		msg+=" "+System.getenv("HOSTNAME");
 		LOGGER.info("Message="+msg);
-		for (Entry<String, String> entry : System.getenv().entrySet())
-		{
-			LOGGER.info("Env:"+entry.getKey()+"="+entry.getValue());
-			
-		}
+		
+//		for (Entry<String, String> entry : System.getenv().entrySet())
+//		{
+//			LOGGER.info("Env:"+entry.getKey()+"="+entry.getValue());
+//			
+//		}
 
 
 		StringBuffer response = new StringBuffer();
