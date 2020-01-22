@@ -76,23 +76,24 @@ public class GreetingResource {
 					HttpURLConnection con = (HttpURLConnection) url.openConnection();
 					for (Entry<String, List<String>> e:headers.getRequestHeaders().entrySet())
 					{
-						if(e.getKey().equals("x-b3-spanid"))
-						{
-							//ParentSpan=span
-							LOGGER.info("Propagating X x-b3-parentspanid:"+e.getValue().get(0));
-							con.setRequestProperty("x-b3-parentspanid",e.getValue().get(0));
-							String newSpan=Long.toHexString(new Random().nextLong()); 
-							LOGGER.info("Propagating X x-b3-spanid:"+newSpan);
-							con.setRequestProperty("x-b3-spanid",newSpan);
-							
-							
-						}
-						else if(e.getKey().equals("x-b3-parentspanid"))
-						{
-							LOGGER.info("Not Propagating (copy span to parent) "+e.getKey()+":"+e.getValue().get(0));
-						
-						}
-						else if (e.getKey().startsWith("x-") || e.getKey().equals("b3"))
+//						if(e.getKey().equals("x-b3-spanid"))
+//						{
+//							//ParentSpan=span
+//							LOGGER.info("Propagating X x-b3-parentspanid:"+e.getValue().get(0));
+//							con.setRequestProperty("x-b3-parentspanid",e.getValue().get(0));
+//							String newSpan=Long.toHexString(new Random().nextLong()); 
+//							LOGGER.info("Propagating X x-b3-spanid:"+newSpan);
+//							con.setRequestProperty("x-b3-spanid",newSpan);
+//							
+//							
+//						}
+//						else if(e.getKey().equals("x-b3-parentspanid"))
+//						{
+//							LOGGER.info("Not Propagating (copy span to parent) "+e.getKey()+":"+e.getValue().get(0));
+//						
+//						}
+//						else 
+							if (e.getKey().startsWith("x-") || e.getKey().equals("b3"))
 						{
 							LOGGER.info("Propagating "+e.getKey()+":"+e.getValue().get(0));
 							con.setRequestProperty(e.getKey(),e.getValue().get(0));
