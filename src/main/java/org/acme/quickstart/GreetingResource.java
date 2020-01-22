@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import java.util.Random;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
@@ -56,6 +57,15 @@ public class GreetingResource {
 
 		StringBuffer response = new StringBuffer();
 		response.append(msg);
+		
+		//Dump HTTP heads
+		LOGGER.info("Dump HTTP Headers of Request");
+		for (Entry<String, List<String>> e:headers.getRequestHeaders().entrySet())
+		{
+			LOGGER.info(e.getKey()+":"+e.getValue().get(0));
+		}
+
+		
 		if (downstreams != null) {
 			for (String downs : downstreams.split(",")) {
 				try {
@@ -71,7 +81,7 @@ public class GreetingResource {
 							//ParentSpan=span
 							LOGGER.info("Propagating X x-b3-parentspanid:"+e.getValue().get(0));
 							con.setRequestProperty("x-b3-parentspanid",e.getValue().get(0));
-							String newSpan=Long.toHexString((long)(Math.random()*0xffffffffl));
+							String newSpan=Long.toHexString(new Random().nextLong()); 
 							LOGGER.info("Propagating X x-b3-spanid:"+newSpan);
 							con.setRequestProperty("x-b3-spanid",newSpan);
 							
