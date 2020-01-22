@@ -69,10 +69,10 @@ public class GreetingResource {
 						if(e.getKey().equals("x-b3-spanid"))
 						{
 							//ParentSpan=span
-							LOGGER.info("Propagating x-b3-parentspanid:"+e.getValue().get(0));
+							LOGGER.info("Propagating X x-b3-parentspanid:"+e.getValue().get(0));
 							con.setRequestProperty("x-b3-parentspanid",e.getValue().get(0));
 							String newSpan=Long.toHexString((long)(Math.random()*0xffffffffl));
-							LOGGER.info("Propagating x-b3-spanid:"+newSpan);
+							LOGGER.info("Propagating X x-b3-spanid:"+newSpan);
 							con.setRequestProperty("x-b3-spanid",newSpan);
 							
 							
