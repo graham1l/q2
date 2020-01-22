@@ -71,15 +71,15 @@ public class GreetingResource {
 							//ParentSpan=span
 							LOGGER.info("Propagating x-b3-parentspanid:"+e.getValue().get(0));
 							con.setRequestProperty("x-b3-parentspanid",e.getValue().get(0));
-							String newSpan=Long.toHexString((long)(Math.random()*0xffffffff));
-							LOGGER.info("Propagating x-b3-parentspanid:"+newSpan);
+							String newSpan=Long.toHexString((long)(Math.random()*0xffffffffl));
+							LOGGER.info("Propagating x-b3-spanid:"+newSpan);
 							con.setRequestProperty("x-b3-spanid",newSpan);
 							
 							
 						}
-						else if(e.getKey().equals("x-b3-spanid"))
+						else if(e.getKey().equals("x-b3-parentspanid"))
 						{
-							LOGGER.info("Not Propagating "+e.getKey()+":"+e.getValue().get(0));
+							LOGGER.info("Not Propagating (copy span to parent) "+e.getKey()+":"+e.getValue().get(0));
 						
 						}
 						else if (e.getKey().startsWith("x-") || e.getKey().equals("b3"))
