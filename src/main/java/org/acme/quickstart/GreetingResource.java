@@ -64,10 +64,17 @@ public class GreetingResource {
 					
 
 					HttpURLConnection con = (HttpURLConnection) url.openConnection();
-//					for (Entry<String, List<String>> e:headers.getRequestHeaders().entrySet())
-//					{
-//						con.setRequestProperty(e.getKey(),e.getValue().get(0));
-//					}
+					for (Entry<String, List<String>> e:headers.getRequestHeaders().entrySet())
+					{
+						if (e.getKey().startsWith("x-") || e.getKey().equals("b3"))
+						{
+							LOGGER.info("Propagating "+e.getKey()+":"+e.getValue().get(0));
+							con.setRequestProperty(e.getKey(),e.getValue().get(0));
+						}else {
+							LOGGER.info("Not Propagating "+e.getKey()+":"+e.getValue().get(0));
+							
+						}
+					}
 				
 					con.setRequestMethod("GET");
 				
