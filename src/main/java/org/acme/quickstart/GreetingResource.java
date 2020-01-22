@@ -64,10 +64,10 @@ public class GreetingResource {
 					
 
 					HttpURLConnection con = (HttpURLConnection) url.openConnection();
-					for (Entry<String, List<String>> e:headers.getRequestHeaders().entrySet())
-					{
-						con.setRequestProperty(e.getKey(),e.getValue().get(0));
-					}
+//					for (Entry<String, List<String>> e:headers.getRequestHeaders().entrySet())
+//					{
+//						con.setRequestProperty(e.getKey(),e.getValue().get(0));
+//					}
 				
 					con.setRequestMethod("GET");
 				
