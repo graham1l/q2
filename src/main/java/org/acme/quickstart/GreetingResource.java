@@ -2,7 +2,6 @@ package org.acme.quickstart;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -14,14 +13,9 @@ import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Invocation.Builder;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
@@ -65,22 +59,19 @@ public class GreetingResource {
 		if (downstreams != null) {
 			for (String downs : downstreams.split(",")) {
 				try {
-					Client client = ClientBuilder.newClient();
-					WebTarget target = client.target("http://" + downs);
-					Builder req = target.request(MediaType.TEXT_PLAIN);
-				
-					LOGGER.info(target.toString());
+					URL url = new URL("http://" + downs);
+					LOGGER.info(url.toExternalForm());
 					
 
+					HttpURLConnection con = (HttpURLConnection) url.openConnection();
+					for (Entry<String, List<String>> e:headers.getRequestHeaders().entrySet())
+					{
+						con.setRequestProperty(e.getKey(),e.getValue().get(0));
+					}
 				
-//					for (Entry<String, List<String>> e:headers.getRequestHeaders().entrySet())
-//					{
-//						con.setRequestProperty(e.getKey(),e.getValue().get(0));
-//					}
-					
+					con.setRequestMethod("GET");
 				
-					InputStream res = req.get(InputStream.class);
-					BufferedReader in = new BufferedReader(new InputStreamReader(res));
+					BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 					String inputLine;
 					StringBuffer content = new StringBuffer();
 					while ((inputLine = in.readLine()) != null) {
