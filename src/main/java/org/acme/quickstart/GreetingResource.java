@@ -95,10 +95,10 @@ public class GreetingResource {
 //						else 
 							if (e.getKey().startsWith("x-") || e.getKey().equals("b3"))
 						{
-							LOGGER.info("Propagating     |"+e.getKey()+":"+e.getValue().get(0));
+							LOGGER.fine("Propagating     |"+e.getKey()+":"+e.getValue().get(0));
 							con.setRequestProperty(e.getKey(),e.getValue().get(0));
 						}else {
-							LOGGER.info("Not Propagating |"+e.getKey()+":"+e.getValue().get(0));
+							LOGGER.fine("Not Propagating |"+e.getKey()+":"+e.getValue().get(0));
 							
 						}
 					}
