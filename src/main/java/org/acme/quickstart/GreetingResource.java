@@ -124,7 +124,7 @@ public class GreetingResource {
 
 			}
 		}
-		LOGGER.info("Exit hello() returns"+response.toString());
+		LOGGER.info("Exit hello(), returns"+response.toString());
 
 		return response.toString();
 
