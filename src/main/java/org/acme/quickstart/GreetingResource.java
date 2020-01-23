@@ -38,44 +38,39 @@ public class GreetingResource {
 	public String hello(@Context HttpHeaders headers) {
 		LOGGER.info("Entered hello()");
 		String downstreams = System.getenv("DOWNSTREAMS");
-		LOGGER.info("Downstreams="+downstreams);
+		LOGGER.info("Downstreams=" + downstreams);
 		String msg = System.getenv("MESSAGE");
-		if (msg==null) 
-		{
-			msg="Hello";
+		if (msg == null) {
+			msg = "Hello";
 		}
-		msg+=" "+System.getenv("HOSTNAME");
-		LOGGER.info("Message="+msg);
-		
+		if (System.getenv("HOSTNAME") != null) {
+			msg += " " + System.getenv("HOSTNAME");
+		}
+		LOGGER.info("Message=" + msg);
+
 //		for (Entry<String, String> entry : System.getenv().entrySet())
 //		{
 //			LOGGER.info("Env:"+entry.getKey()+"="+entry.getValue());
 //			
 //		}
 
-
 		StringBuffer response = new StringBuffer();
 		response.append(msg);
-		
-		//Dump HTTP heads
+
+		// Dump HTTP heads
 		LOGGER.info("Dump HTTP Headers of Request");
-		for (Entry<String, List<String>> e:headers.getRequestHeaders().entrySet())
-		{
-			LOGGER.info(e.getKey()+":"+e.getValue().get(0));
+		for (Entry<String, List<String>> e : headers.getRequestHeaders().entrySet()) {
+			LOGGER.info(e.getKey() + ":" + e.getValue().get(0));
 		}
 
-		
 		if (downstreams != null) {
 			for (String downs : downstreams.split(",")) {
 				try {
 					URL url = new URL("http://" + downs);
-					LOGGER.info("Calling "+url.toExternalForm());
-					
+					LOGGER.info("Calling " + url.toExternalForm());
 
-					
 					HttpURLConnection con = (HttpURLConnection) url.openConnection();
-					for (Entry<String, List<String>> e:headers.getRequestHeaders().entrySet())
-					{
+					for (Entry<String, List<String>> e : headers.getRequestHeaders().entrySet()) {
 //						if(e.getKey().equals("x-b3-spanid"))
 //						{
 //							//ParentSpan=span
@@ -93,18 +88,17 @@ public class GreetingResource {
 //						
 //						}
 //						else 
-							if (e.getKey().startsWith("x-") || e.getKey().equals("b3"))
-						{
-							LOGGER.fine("Propagating     |"+e.getKey()+":"+e.getValue().get(0));
-							con.setRequestProperty(e.getKey(),e.getValue().get(0));
-						}else {
-							LOGGER.fine("Not Propagating |"+e.getKey()+":"+e.getValue().get(0));
-							
+						if (e.getKey().startsWith("x-") || e.getKey().equals("b3")) {
+							LOGGER.fine("Propagating     |" + e.getKey() + ":" + e.getValue().get(0));
+							con.setRequestProperty(e.getKey(), e.getValue().get(0));
+						} else {
+							LOGGER.fine("Not Propagating |" + e.getKey() + ":" + e.getValue().get(0));
+
 						}
 					}
-				
+
 					con.setRequestMethod("GET");
-				
+
 					BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 					LOGGER.info("Called ");
 					String inputLine;
@@ -115,7 +109,7 @@ public class GreetingResource {
 					response.append(',');
 					response.append(content);
 					in.close();
-					LOGGER.fine("Response :"+content);
+					LOGGER.fine("Response :" + content);
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -124,7 +118,7 @@ public class GreetingResource {
 
 			}
 		}
-		LOGGER.info("Exit hello(), returns"+response.toString());
+		LOGGER.info("Exit hello(), returns" + response.toString());
 
 		return response.toString();
 
