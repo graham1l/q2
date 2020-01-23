@@ -1,1 +1,1 @@
-JAVA_OPTIONS=-Dlog4j.debug
+JAVA_OPTIONS=-Dlog4j.debug -Dquarkus.log.level=DEBUG
