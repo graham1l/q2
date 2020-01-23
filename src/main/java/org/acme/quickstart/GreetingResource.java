@@ -115,7 +115,7 @@ public class GreetingResource {
 					response.append(',');
 					response.append(content);
 					in.close();
-					LOGGER.fine("Response "+content);
+					LOGGER.fine("Response :"+content);
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
