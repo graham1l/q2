@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
-import java.util.Random;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
@@ -70,9 +69,10 @@ public class GreetingResource {
 			for (String downs : downstreams.split(",")) {
 				try {
 					URL url = new URL("http://" + downs);
-					LOGGER.info(url.toExternalForm());
+					LOGGER.info("Calling "+url.toExternalForm());
 					
 
+					
 					HttpURLConnection con = (HttpURLConnection) url.openConnection();
 					for (Entry<String, List<String>> e:headers.getRequestHeaders().entrySet())
 					{
@@ -95,10 +95,10 @@ public class GreetingResource {
 //						else 
 							if (e.getKey().startsWith("x-") || e.getKey().equals("b3"))
 						{
-							LOGGER.info("Propagating "+e.getKey()+":"+e.getValue().get(0));
+							LOGGER.info("Propagating     |"+e.getKey()+":"+e.getValue().get(0));
 							con.setRequestProperty(e.getKey(),e.getValue().get(0));
 						}else {
-							LOGGER.info("Not Propagating "+e.getKey()+":"+e.getValue().get(0));
+							LOGGER.info("Not Propagating |"+e.getKey()+":"+e.getValue().get(0));
 							
 						}
 					}
@@ -106,6 +106,7 @@ public class GreetingResource {
 					con.setRequestMethod("GET");
 				
 					BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+					LOGGER.info("Called ");
 					String inputLine;
 					StringBuffer content = new StringBuffer();
 					while ((inputLine = in.readLine()) != null) {
@@ -114,6 +115,7 @@ public class GreetingResource {
 					response.append(',');
 					response.append(content);
 					in.close();
+					LOGGER.fine("Response "+content);
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -122,7 +124,7 @@ public class GreetingResource {
 
 			}
 		}
-		LOGGER.info("Exit hello()");
+		LOGGER.info("Exit hello() returns"+response.toString());
 
 		return response.toString();
 
